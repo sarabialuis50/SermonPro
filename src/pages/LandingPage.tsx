@@ -411,13 +411,13 @@ export default function LandingPage({ onGoToAuth, onStartDemo }: LandingPageProp
         </div>
 
         {/* Stats bar */}
-        <div className="relative border-t-2 border-b-2 border-slate-900 bg-slate-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-0">
+          <div className="border-2 border-slate-900 bg-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
             <div className="grid grid-cols-2 md:grid-cols-4">
               {STATS.map((stat, i) => (
                 <div
                   key={i}
-                  className={`py-6 px-4 text-center ${i < 3 ? "border-r-2 border-slate-700" : ""}`}
+                  className={`py-6 px-4 text-center ${i % 2 === 0 ? "border-r-2 border-slate-700" : ""} md:border-r-2 md:last:border-r-0`}
                 >
                   <div className="font-mono text-2xl font-black text-amber-400">{stat.value}</div>
                   <div className="text-xs text-slate-400 uppercase tracking-wider font-bold mt-0.5">{stat.label}</div>
