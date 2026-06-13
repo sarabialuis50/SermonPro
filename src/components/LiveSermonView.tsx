@@ -596,7 +596,7 @@ export default function LiveSermonView({
               {/* Structured textual body */}
               <div 
                 className="font-serif leading-relaxed text-slate-250 font-normal focus:outline-hidden"
-                style={{ fontSize: `${textScale * 1.1}rem` }}
+                style={{ fontSize: `${textScale * 0.85}rem` }}
               >
                 {activeSection?.content ? (
                   <div className="space-y-4 whitespace-pre-wrap select-text">
