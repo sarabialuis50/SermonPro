@@ -609,28 +609,32 @@ export default function LandingPage({ onGoToAuth, onStartDemo }: LandingPageProp
       </section>
 
       {/* ─── FINAL CTA ──────────────────────────────────────── */}
-      <section className="py-24 bg-slate-900 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-5xl mb-6">✝️</div>
-          <h2 className="font-serif text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
-            Tu congregación merece<br />
-            <span className="text-amber-400">tu mejor sermón.</span>
-          </h2>
-          <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
-            Únete a los más de 2,000 pastores que ya predican con más orden, claridad y profundidad usando SermonPro.
-          </p>
-          <button
-            onClick={onGoToAuth}
-            className="inline-flex items-center space-x-2 px-10 py-5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm uppercase tracking-widest border-2 border-white/20 shadow-[6px_6px_0px_0px_rgba(245,158,11,0.3)] hover:shadow-[3px_3px_0px_0px_rgba(245,158,11,0.3)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer"
-            id="final-cta-btn"
-          >
-            <span>Crear Mi Cuenta Gratis</span>
-            <ArrowRight className="h-5 w-5" />
-          </button>
-          <p className="text-slate-500 text-xs mt-4 font-mono">
-            Sin tarjeta de crédito • 4 sermones gratis • Cancela cuando quieras
-          </p>
+      <section className="py-24 relative overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative bg-slate-900 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] py-20 px-6 sm:px-12 text-center overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 max-w-4xl mx-auto">
+              <div className="text-5xl mb-6">✝️</div>
+              <h2 className="font-serif text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
+                Tu congregación merece<br />
+                <span className="text-amber-400">tu mejor sermón.</span>
+              </h2>
+              <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
+                Únete a los más de 2,000 pastores que ya predican con más orden, claridad y profundidad usando SermonPro.
+              </p>
+              <button
+                onClick={onGoToAuth}
+                className="inline-flex items-center space-x-2 px-10 py-5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm uppercase tracking-widest border-2 border-white/20 shadow-[6px_6px_0px_0px_rgba(245,158,11,0.3)] hover:shadow-[3px_3px_0px_0px_rgba(245,158,11,0.3)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer"
+                id="final-cta-btn"
+              >
+                <span>Crear Mi Cuenta Gratis</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+              <p className="text-slate-500 text-xs mt-4 font-mono">
+                Sin tarjeta de crédito • 4 sermones gratis • Cancela cuando quieras
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
