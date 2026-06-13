@@ -4,7 +4,7 @@ import {
   Sparkles, Trash2, ChevronDown, ChevronUp, 
   Plus, Check, Copy, X, ChevronLeft, StickyNote 
 } from "lucide-react";
-import { Sermon, SermonSection, Note } from "../types";
+import { Sermon, SermonSection } from "../types";
 import { generateSermonContentAsync, BIBLE_REGEX_STR, BIBLE_VERSIONS } from "../utils";
 import NoteModal from "./NoteModal";
 import AiAssistantModal from "./AiAssistantModal";
