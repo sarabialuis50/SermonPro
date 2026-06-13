@@ -612,11 +612,11 @@ export default function LiveSermonView({
 
             {/* Footnotes block (Privado notes) */}
             {sermon.notes && (
-              <div className="mt-4 p-3 bg-slate-950 border border-slate-800 border-l-4 border-l-amber-500 text-[11px] text-slate-400 font-sans select-text">
-                <span className="text-[8px] font-bold uppercase tracking-widest text-slate-555 block mb-0.5 font-mono">
-                  Instrucciones Privadas de Púlpito:
+              <div className="mt-3 p-2 bg-slate-950/60 border border-slate-800 border-l-2 border-l-amber-500/50 text-[10px] text-slate-500 font-sans select-text shrink-0">
+                <span className="text-[8px] font-bold uppercase tracking-widest text-slate-600 block mb-0.5 font-mono">
+                  Instrucciones Privadas:
                 </span>
-                <p className="leading-relaxed whitespace-pre-wrap">{sermon.notes}</p>
+                <p className="leading-tight whitespace-pre-wrap">{sermon.notes}</p>
               </div>
             )}
 
