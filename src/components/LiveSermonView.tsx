@@ -92,21 +92,28 @@ export default function LiveSermonView({
       if (!ctx) return;
       if (ctx.state === "suspended") ctx.resume();
       
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
+      const playSingleBeep = (timeOffset: number) => {
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, ctx.currentTime + timeOffset); // A5 note
+        
+        gainNode.gain.setValueAtTime(1.0, ctx.currentTime + timeOffset); // 100% volume
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + timeOffset + 0.3);
+        
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        osc.start(ctx.currentTime + timeOffset);
+        osc.stop(ctx.currentTime + timeOffset + 0.3);
+      };
+
+      // Play 3 consecutive beeps
+      playSingleBeep(0);
+      playSingleBeep(0.4);
+      playSingleBeep(0.8);
       
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
-      
-      // Gentle fade out to avoid clicks
-      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-      
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      
-      osc.start();
-      osc.stop(ctx.currentTime + 0.5);
     } catch (e) {
       console.error("Audio playback failed", e);
     }
