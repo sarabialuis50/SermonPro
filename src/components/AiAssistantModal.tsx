@@ -49,20 +49,14 @@ export default function AiAssistantModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/70 backdrop-blur-sm select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm select-none p-4"
       onClick={onClose}
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div
-        className="relative w-full sm:max-w-2xl overflow-hidden bg-white shadow-geometric-xl dark:bg-zinc-900 border-2 border-slate-900 dark:border-zinc-700 flex flex-col rounded-t-2xl sm:rounded-none"
+        className="relative w-full sm:max-w-2xl overflow-hidden bg-white shadow-geometric-xl dark:bg-zinc-900 border-2 border-slate-900 dark:border-zinc-700 flex flex-col"
         onClick={(e) => e.stopPropagation()}
         style={{ maxHeight: '90dvh' }}
       >
-        {/* Drag handle (mobile only) */}
-        <div className="flex justify-center pt-3 pb-1 sm:hidden shrink-0">
-          <div className="h-1 w-10 rounded-full bg-slate-300 dark:bg-zinc-600" />
-        </div>
-
         <div className="h-1.5 w-full bg-amber-500 shrink-0" />
 
         {/* Header */}

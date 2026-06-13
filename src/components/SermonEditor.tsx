@@ -1205,18 +1205,12 @@ ${sermon.notes || "No hay notas adicionales."}`;
         {/* Note Builder Modal */}
         {activeNoteBuilderSectionId && (
           <div
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/70 backdrop-blur-xs"
-            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4"
           >
-            <div className="relative w-full sm:max-w-md overflow-hidden bg-white text-slate-900 shadow-geometric-xl dark:bg-zinc-900 dark:text-neutral-100 border-2 border-slate-900 dark:border-zinc-700 flex flex-col rounded-t-2xl sm:rounded-none"
+            <div className="relative w-full sm:max-w-md overflow-hidden bg-white text-slate-900 shadow-geometric-xl dark:bg-zinc-900 dark:text-neutral-100 border-2 border-slate-900 dark:border-zinc-700 flex flex-col"
               style={{ maxHeight: '90dvh' }}
             >
               <div className="h-1 w-full bg-sky-500 absolute top-0 left-0 z-10" />
-              
-              {/* Drag handle (mobile) */}
-              <div className="flex justify-center pt-3 pb-1 sm:hidden">
-                <div className="h-1 w-10 rounded-full bg-slate-300 dark:bg-zinc-600" />
-              </div>
 
               {/* Modal Header */}
               <div className="px-5 py-4 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between shrink-0">

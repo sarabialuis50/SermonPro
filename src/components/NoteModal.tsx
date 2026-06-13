@@ -19,27 +19,21 @@ export default function NoteModal({ content, onClose }: NoteModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-xs select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs select-none p-4"
       id="note-modal-backdrop"
       onClick={onClose}
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       {/* Modal Card */}
       <div
-        className="relative w-full sm:max-w-2xl overflow-hidden bg-white text-slate-900 shadow-geometric-xl dark:bg-zinc-900 dark:text-neutral-100 border-2 border-slate-900 dark:border-zinc-700 transition-all flex flex-col rounded-t-2xl sm:rounded-none"
+        className="relative w-full sm:max-w-2xl overflow-hidden bg-white text-slate-900 shadow-geometric-xl dark:bg-zinc-900 dark:text-neutral-100 border-2 border-slate-900 dark:border-zinc-700 transition-all flex flex-col"
         id="note-modal-content"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
         style={{ maxHeight: '90dvh' }}
       >
-        {/* Drag handle (mobile only) */}
-        <div className="flex justify-center pt-3 pb-1 sm:hidden shrink-0">
-          <div className="h-1 w-10 rounded-full bg-slate-300 dark:bg-zinc-600" />
-        </div>
-
         {/* Upper Accent Ring/Header decoration */}
-        <div className="h-1.5 w-full bg-sky-500 shrink-0 sm:block hidden" />
+        <div className="h-1.5 w-full bg-sky-500 shrink-0 hidden sm:block" />
 
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-slate-900 bg-sky-50/50 px-5 py-4 dark:border-zinc-800 dark:bg-zinc-950/40 shrink-0">
