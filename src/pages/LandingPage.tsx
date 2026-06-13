@@ -466,53 +466,57 @@ export default function LandingPage({ onGoToAuth, onStartDemo }: LandingPageProp
       </section>
 
       {/* ─── TESTIMONIALS ───────────────────────────────────── */}
-      <section id="testimonials" className="py-24 bg-slate-900 relative overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: "linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px)",
-            backgroundSize: "30px 30px"
-          }} />
-        </div>
-
+      <section id="testimonials" className="py-24 relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center space-x-2 px-3 py-1.5 bg-white/10 border border-white/20 mb-4">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">Testimonios</span>
+          <div className="relative bg-slate-900 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] py-20 px-6 sm:px-12 overflow-hidden">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className="absolute inset-0" style={{
+                backgroundImage: "linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px)",
+                backgroundSize: "30px 30px"
+              }} />
             </div>
-            <h2 className="font-serif text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
-              Lo que dicen nuestros pastores
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Más de 2,000 predicadores ya confían en SermonPro para sus mensajes dominicales.
-            </p>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <div
-                key={i}
-                className="bg-white/5 border-2 border-white/10 hover:border-amber-500/50 p-7 transition-all"
-                id={`testimonial-card-${i}`}
-              >
-                <Quote className="h-8 w-8 text-amber-500/40 mb-4" />
-                <p className="text-slate-300 leading-relaxed text-sm mb-6 italic">"{t.text}"</p>
-                <div className="flex items-center space-x-3">
-                  <div className={`h-10 w-10 rounded-none border-2 border-white/20 ${t.color} flex items-center justify-center text-xs font-black text-white`}>
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-sm">{t.name}</div>
-                    <div className="text-slate-500 text-xs">{t.church}</div>
-                  </div>
+            <div className="relative z-10">
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center space-x-2 px-3 py-1.5 bg-white/10 border border-white/20 mb-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">Testimonios</span>
                 </div>
-                <div className="flex space-x-0.5 mt-4">
-                  {[...Array(t.rating)].map((_, j) => (
-                    <Star key={j} className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
-                  ))}
-                </div>
+                <h2 className="font-serif text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+                  Lo que dicen nuestros pastores
+                </h2>
+                <p className="text-slate-400 text-lg">
+                  Más de 2,000 predicadores ya confían en SermonPro para sus mensajes dominicales.
+                </p>
               </div>
-            ))}
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {TESTIMONIALS.map((t, i) => (
+                  <div
+                    key={i}
+                    className="bg-white/5 border-2 border-white/10 hover:border-amber-500/50 p-7 transition-all"
+                    id={`testimonial-card-${i}`}
+                  >
+                    <Quote className="h-8 w-8 text-amber-500/40 mb-4" />
+                    <p className="text-slate-300 leading-relaxed text-sm mb-6 italic">"{t.text}"</p>
+                    <div className="flex items-center space-x-3">
+                      <div className={`h-10 w-10 rounded-none border-2 border-white/20 ${t.color} flex items-center justify-center text-xs font-black text-white`}>
+                        {t.avatar}
+                      </div>
+                      <div>
+                        <div className="font-bold text-white text-sm">{t.name}</div>
+                        <div className="text-slate-500 text-xs">{t.church}</div>
+                      </div>
+                    </div>
+                    <div className="flex space-x-0.5 mt-4">
+                      {[...Array(t.rating)].map((_, j) => (
+                        <Star key={j} className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
