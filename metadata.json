@@ -1,0 +1,8 @@
+{
+  "name": "Sermon Timer",
+  "description": "Herramienta homilética para organizar sermones, equilibrar tiempos de bloques y predicar con un temporizador adaptable para el púlpito.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
