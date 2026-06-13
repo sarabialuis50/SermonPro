@@ -417,7 +417,7 @@ export default function LandingPage({ onGoToAuth, onStartDemo }: LandingPageProp
               {STATS.map((stat, i) => (
                 <div
                   key={i}
-                  className={`py-6 px-4 text-center ${i % 2 === 0 ? "border-r-2 border-slate-700" : ""} md:border-r-2 md:last:border-r-0`}
+                  className={`py-6 px-4 text-center border-slate-700 ${i % 2 === 0 ? "border-r-2" : ""} md:border-r-2 md:last:border-r-0`}
                 >
                   <div className="font-mono text-2xl font-black text-amber-400">{stat.value}</div>
                   <div className="text-xs text-slate-400 uppercase tracking-wider font-bold mt-0.5">{stat.label}</div>
