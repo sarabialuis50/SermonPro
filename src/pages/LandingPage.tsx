@@ -88,7 +88,7 @@ const PLANS = [
     currency: "",
     period: "",
     description: "Para pastores que están comenzando",
-    color: "border-slate-200",
+    color: "border-slate-900",
     headerBg: "bg-slate-50",
     ctaClass: "bg-slate-900 hover:bg-slate-800 text-white border-slate-900",
     badge: null,
@@ -183,12 +183,12 @@ export default function LandingPage({ onGoToAuth, onStartDemo }: LandingPageProp
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2.5">
+          <a href="#landing-page" className="flex items-center space-x-2.5 cursor-pointer hover:opacity-90 transition-opacity">
             <div className="flex h-9 w-9 items-center justify-center bg-amber-500 border-2 border-slate-900 text-lg select-none shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
               ✝️
             </div>
             <span className="font-serif text-lg font-black tracking-tight text-slate-950">SermonPro</span>
-          </div>
+          </a>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center space-x-8">
