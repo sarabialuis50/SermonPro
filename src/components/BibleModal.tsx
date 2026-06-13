@@ -112,7 +112,7 @@ export default function BibleModal({
                 <span className="text-4xl font-bold font-serif text-amber-500/70 mr-1 select-none">
                   «
                 </span>
-                <p className="inline text-2xl font-serif italic leading-relaxed text-slate-700 dark:text-stone-300 selection:bg-amber-200 dark:selection:bg-amber-900/60">
+                <p className="inline text-xl sm:text-2xl font-serif italic leading-relaxed text-slate-700 dark:text-stone-300 selection:bg-amber-200 dark:selection:bg-amber-900/60">
                   {verse.text}
                 </p>
                 <span className="text-4xl font-bold font-serif text-amber-500/70 ml-1 select-none">

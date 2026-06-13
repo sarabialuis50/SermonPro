@@ -64,7 +64,7 @@ export default function NoteModal({ content, onClose }: NoteModalProps) {
         <div className="flex-1 overflow-y-auto px-6 py-6 leading-relaxed text-base relative bg-white dark:bg-zinc-900">
           <StickyNote className="absolute top-4 left-4 h-10 w-10 text-slate-100 dark:text-zinc-800 pointer-events-none opacity-40" />
           <div className="relative z-10 font-sans text-slate-800 dark:text-stone-200">
-            <p className="whitespace-pre-wrap font-sans text-base sm:text-xl leading-relaxed text-slate-700 dark:text-stone-300 selection:bg-sky-200 dark:selection:bg-sky-900/60">
+            <p className="whitespace-pre-wrap font-sans text-sm sm:text-xl leading-relaxed text-slate-700 dark:text-stone-300 selection:bg-sky-200 dark:selection:bg-sky-900/60">
               {content}
             </p>
           </div>

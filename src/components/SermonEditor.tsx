@@ -4,8 +4,8 @@ import {
   Sparkles, Trash2, ChevronDown, ChevronUp, 
   Plus, Check, Copy, X, ChevronLeft, StickyNote 
 } from "lucide-react";
-import { Sermon, SermonSection } from "../types";
-import { BIBLE_VERSIONS } from "../utils";
+import { Sermon, SermonSection, Note } from "../types";
+import { generateSermonContentAsync, BIBLE_REGEX_STR } from "../utils";
 import NoteModal from "./NoteModal";
 import AiAssistantModal from "./AiAssistantModal";
 
@@ -84,25 +84,6 @@ const NUEVO_TESTAMENTO = [
 const BookOpenIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-0.5 shrink-0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
 
 const StickyNoteIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-0.5 shrink-0"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L16 3Z"/><path d="M16 3v6h6"/></svg>`;
-
-const BIBLE_BOOKS_PATTERN = [
-  // Antiguo Testamento
-  "G\u00e9nesis", "\u00c9xodo", "Levítico", "Números", "Deuteronomio", "Josué", "Jueces", "Rut",
-  "1\\s+Samuel", "2\\s+Samuel", "1\\s+Reyes", "2\\s+Reyes", "1\\s+Crónicas", "2\\s+Crónicas",
-  "Esdras", "Nehemías", "Ester", "Job", "Salmos", "Proverbios", "Eclesiastés", "Cantares",
-  "Isaías", "Jeremías", "Lamentaciones", "Ezequiel", "Daniel",
-  "Oseas", "Joel", "Amós", "Abdías", "Jonás", "Miqueas", "Nahúm", "Habacuc",
-  "Sofonías", "Hageo", "Zacarías", "Malaquías",
-  // Nuevo Testamento
-  "Mateo", "Marcos", "Lucas", "Juan", "Hechos", "Romanos",
-  "1\\s+Corintios", "2\\s+Corintios", "Gálatas", "Efesios", "Filipenses", "Colosenses",
-  "1\\s+Tesalonicenses", "2\\s+Tesalonicenses", "1\\s+Timoteo", "2\\s+Timoteo",
-  "Tito", "Filemón", "Hebreos", "Santiago",
-  "1\\s+Pedro", "2\\s+Pedro", "1\\s+Juan", "2\\s+Juan", "3\\s+Juan",
-  "Judas", "Apocalipsis"
-].join("|");
-
-const BIBLE_REGEX_STR = `(?:${BIBLE_BOOKS_PATTERN})\\s+\\d+(?::\\d+(?:-\\d+)?)?`;
 
 const textToHtml = (text: string): string => {
   if (!text) return "";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, RotateCcw, ChevronLeft, ChevronRight, BookOpen, VolumeX, Volume2, X, ZoomIn, ZoomOut, Maximize2, Minimize2, Quote, Clipboard, Check, AlertCircle, StickyNote } from "lucide-react";
 import { Sermon, SermonSection, BibleVerse } from "../types";
-import { BIBLE_VERSIONS } from "../utils";
+import { BIBLE_VERSIONS, BIBLE_REGEX_STR } from "../utils";
 import BibleModal from "./BibleModal";
 import NoteModal from "./NoteModal";
 
@@ -30,7 +30,7 @@ export default function LiveSermonView({
   const [sectionSeconds, setSectionSeconds] = useState(0);
   
   // Custom states
-  const [textScale, setTextScale] = useState(1.25); // Font size multiplier: 1, 1.25, 1.5, 1.75, 2
+  const [textScale, setTextScale] = useState(1.0); // Font size multiplier: 1, 1.25, 1.5, 1.75, 2
   const [vibrateOnEnd, setVibrateOnEnd] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [bibleCopied, setBibleCopied] = useState(false);
@@ -211,7 +211,7 @@ export default function LiveSermonView({
     const matches: ParseMatch[] = [];
 
     // 1. Find Bible matches
-    const bibleRegex = /\b(?:[1-3]\s+)?[A-Z][a-záéíóúñ]+\s+\d+(?::\d+(?:-\d+)?)?/g;
+    const bibleRegex = new RegExp(BIBLE_REGEX_STR, "g");
     let match: RegExpExecArray | null;
     while ((match = bibleRegex.exec(text)) !== null) {
       matches.push({
@@ -261,10 +261,10 @@ export default function LiveSermonView({
           <button
             key={`bible-${m.index}-${idx}`}
             onClick={() => handleBibleLookup(m.text)}
-            className="px-2 py-0.5 bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 text-slate-900 dark:text-amber-300 font-serif font-bold italic border-b-2 border-slate-900 dark:border-amber-500 mx-1 cursor-pointer transition-all inline-flex items-center align-baseline text-lg select-text"
+            className="px-1.5 py-0.5 bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 text-slate-900 dark:text-amber-300 font-serif font-bold italic border-b-2 border-slate-900 dark:border-amber-500 mx-1 cursor-pointer transition-all inline-flex items-center align-baseline text-[0.85em] select-text"
             title={`Consultar versículo: ${m.text}`}
           >
-            <BookOpen className="h-4 w-4 mr-1 text-amber-600 dark:text-amber-400 inline shrink-0" />
+            <BookOpen className="h-3.5 w-3.5 mr-1 text-amber-600 dark:text-amber-400 inline shrink-0" />
             {m.text}
           </button>
         );
@@ -273,10 +273,10 @@ export default function LiveSermonView({
           <button
             key={`note-${m.index}-${idx}`}
             onClick={() => setActiveNoteContent(m.noteText || "")}
-            className="px-2 py-0.5 bg-sky-100 hover:bg-sky-200 dark:bg-sky-950/50 dark:hover:bg-sky-900/60 text-slate-900 dark:text-sky-300 font-sans font-bold border-b-2 border-slate-900 dark:border-sky-500 mx-1 cursor-pointer transition-all inline-flex items-center align-baseline text-lg select-text"
+            className="px-1.5 py-0.5 bg-sky-100 hover:bg-sky-200 dark:bg-sky-950/50 dark:hover:bg-sky-900/60 text-slate-900 dark:text-sky-300 font-sans font-bold border-b-2 border-slate-900 dark:border-sky-500 mx-1 cursor-pointer transition-all inline-flex items-center align-baseline text-[0.85em] select-text"
             title="Ver Nota"
           >
-            <StickyNote className="h-4 w-4 mr-1 text-sky-600 dark:text-sky-400 inline shrink-0" />
+            <StickyNote className="h-3.5 w-3.5 mr-1 text-sky-600 dark:text-sky-400 inline shrink-0" />
             Nota
           </button>
         );
@@ -396,11 +396,11 @@ export default function LiveSermonView({
           <div className="space-y-3">
             <div className="bg-slate-900 border-2 border-slate-800 p-3 relative overflow-hidden">
               <div className="absolute top-0 left-0 bottom-0 bg-amber-500/10 pointer-events-none" style={{ width: `${getSectionTimeProgressPercent()}%` }} />
-              <div className="flex items-center justify-between font-mono text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+              <div className="flex items-center justify-between font-mono text-[9px] sm:text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
                 <span>Bloque actual ({currentSectionIndex + 1} de {sermon.sections.length})</span>
                 <span>Asignado: {activeSection?.durationMinutes || 0} min</span>
               </div>
-              <h2 className="text-lg sm:text-xl font-serif font-bold text-white relative z-10 dark:text-amber-400">
+              <h2 className="text-base sm:text-xl font-serif font-bold text-white relative z-10 dark:text-amber-400">
                 {activeSection?.title || "Sin sección activa"}
               </h2>
             </div>
@@ -416,7 +416,7 @@ export default function LiveSermonView({
                   <span className="text-[9px] uppercase font-bold tracking-widest font-mono text-slate-400 truncate block">
                     Cronómetro del Bloque
                   </span>
-                  <div className={`text-4xl sm:text-5xl font-mono font-bold tracking-tight mt-0.5 ${isSectionOvertime ? "text-red-500 animate-pulse" : "text-white"}`}>
+                  <div className={`text-3xl sm:text-5xl font-mono font-bold tracking-tight mt-0.5 ${isSectionOvertime ? "text-red-500 animate-pulse" : "text-white"}`}>
                     {formatTime(sectionSeconds)}
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function LiveSermonView({
                   <span className="text-[9px] uppercase font-bold tracking-widest font-mono text-slate-400 truncate block">
                     Tiempo Total
                   </span>
-                  <div className={`text-4xl sm:text-5xl font-mono font-bold tracking-tight mt-0.5 ${isSermonOvertime ? "text-red-500 animate-pulse" : "text-emerald-400"}`}>
+                  <div className={`text-3xl sm:text-5xl font-mono font-bold tracking-tight mt-0.5 ${isSermonOvertime ? "text-red-500 animate-pulse" : "text-emerald-400"}`}>
                     {formatTime(totalSeconds)}
                   </div>
                 </div>
@@ -468,7 +468,7 @@ export default function LiveSermonView({
           </div>
 
           {/* Timeline segments checklist preview */}
-          <div className="flex-1 my-3 overflow-y-auto min-h-[100px] max-h-[22vh] border border-slate-800 p-2 space-y-1 bg-slate-900/40">
+          <div className="flex-1 my-3 overflow-y-auto min-h-[90px] max-h-[16vh] sm:max-h-[22vh] border border-slate-800 p-2 space-y-1 bg-slate-900/40">
             <span className="text-[9px] font-bold uppercase tracking-widest text-slate-550 font-mono block mb-1">
               Siguiente en el Bosquejo
             </span>
@@ -577,19 +577,19 @@ export default function LiveSermonView({
             
             {/* Notes display board with magnifying controls */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div className="hidden sm:flex items-center justify-between border-b border-slate-800 pb-2">
                 <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 font-mono select-none">
                   Apuntes y Contenido del Discurso
                 </span>
-                <span className="text-xs text-amber-500 font-serif font-bold italic select-none">
-                  Haga click en cualquier versículo para verlo al instante en la Biblia
+                <span className="text-[10px] text-amber-500 font-serif font-bold italic select-none">
+                  Haga click en cualquier versículo para verlo en la Biblia
                 </span>
               </div>
 
               {/* Structured textual body */}
               <div 
                 className="font-serif leading-relaxed text-slate-250 font-normal focus:outline-hidden"
-                style={{ fontSize: `${textScale * 1.25}rem` }}
+                style={{ fontSize: `${textScale * 1.1}rem` }}
               >
                 {activeSection?.content ? (
                   <div className="space-y-4 whitespace-pre-wrap select-text">

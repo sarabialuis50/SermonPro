@@ -1,5 +1,24 @@
 import { Sermon, BibleVerse } from "./types";
 
+export const BIBLE_BOOKS_PATTERN = [
+  // Antiguo Testamento
+  "G\u00e9nesis", "\u00c9xodo", "Levítico", "Números", "Deuteronomio", "Josué", "Jueces", "Rut",
+  "1\\s+Samuel", "2\\s+Samuel", "1\\s+Reyes", "2\\s+Reyes", "1\\s+Crónicas", "2\\s+Crónicas",
+  "Esdras", "Nehemías", "Ester", "Job", "Salmos", "Proverbios", "Eclesiastés", "Cantares",
+  "Isaías", "Jeremías", "Lamentaciones", "Ezequiel", "Daniel",
+  "Oseas", "Joel", "Amós", "Abdías", "Jonás", "Miqueas", "Nahúm", "Habacuc",
+  "Sofonías", "Hageo", "Zacarías", "Malaquías",
+  // Nuevo Testamento
+  "Mateo", "Marcos", "Lucas", "Juan", "Hechos", "Romanos",
+  "1\\s+Corintios", "2\\s+Corintios", "Gálatas", "Efesios", "Filipenses", "Colosenses",
+  "1\\s+Tesalonicenses", "2\\s+Tesalonicenses", "1\\s+Timoteo", "2\\s+Timoteo",
+  "Tito", "Filemón", "Hebreos", "Santiago",
+  "1\\s+Pedro", "2\\s+Pedro", "1\\s+Juan", "2\\s+Juan", "3\\s+Juan",
+  "Judas", "Apocalipsis"
+].join("|");
+
+export const BIBLE_REGEX_STR = `(?:${BIBLE_BOOKS_PATTERN})\\s+\\d+(?::\\d+(?:-\\d+)?)?`;
+
 // Embedded Reina-Valera 1960 Bible database for high-readability live pulpit queries
 export const BIBLE_LIBRARY: Record<string, string> = {
   "Juan 3:16": "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.",
