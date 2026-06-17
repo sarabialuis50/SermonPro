@@ -156,8 +156,7 @@ function Dashboard({ isDemo, onExitDemo }: { isDemo?: boolean, onExitDemo?: () =
         </div>
       )}
 
-      {/* Background grid */}
-      <div className="absolute inset-x-0 top-0 h-96 geometric-grid opacity-35 dark:opacity-20 pointer-events-none select-none" />
+      {/* Background grid removed */}
 
       {/* Global Navigation */}
       <header className="relative z-10 border-b-4 border-slate-900 bg-white dark:bg-zinc-900 dark:border-zinc-800 transition-colors">

@@ -376,11 +376,12 @@ export default function SermonEditor({ sermon, onChange, onStartPreaching, isPro
 
   const handleAddSection = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newSectionTitle.trim()) return;
+    
+    const title = newSectionTitle.trim() || `Bloque ${sermon.sections.length + 1}`;
 
     const newSection: SermonSection = {
       id: "sec_" + Date.now(),
-      title: newSectionTitle.trim(),
+      title: title,
       durationMinutes: 10,
       content: ""
     };

@@ -1,9 +1,0 @@
-# VITE_GEMINI_API_KEY: Required for Gemini AI API calls on the client.
-VITE_GEMINI_API_KEY="AQ.Ab8RN6KYUSGLy_ggdOsAUejbTU-3LHh7Nl01nyOC2nZNrKP0-g"
-
-# APP_URL: The URL where this applet is hosted.
-APP_URL="https://sermon-pro.vercel.app"
-
-# Supabase
-VITE_SUPABASE_URL="https://xnmwsrtugcsyciysgdep.supabase.co"
-VITE_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubXdzcnR1Z2NzeWNpeXNnZGVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExODEyMjIsImV4cCI6MjA5Njc1NzIyMn0.gE9J9ZlWXdC5YHAdEDy-V0SitWpGEGMUZufiEA3ggao"
