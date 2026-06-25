@@ -1,4 +1,5 @@
 import { Sermon, BibleVerse } from "./types";
+import { GoogleGenAI } from "@google/genai";
 
 export const BIBLE_BOOKS_PATTERN = [
   // Antiguo Testamento
@@ -107,7 +108,7 @@ export async function lookupScriptureAsync(query: string, version: string): Prom
   const versionName = selectedVersionObj ? selectedVersionObj.name : "Reina-Valera 1960";
 
   const cachedModel = localStorage.getItem("sermonpro_last_working_gemini_model");
-  const baseModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-1.5-flash"];
+  const baseModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
   const modelsToTry = cachedModel && baseModels.includes(cachedModel)
     ? [cachedModel, ...baseModels.filter(m => m !== cachedModel)]
     : baseModels;
@@ -116,7 +117,7 @@ export async function lookupScriptureAsync(query: string, version: string): Prom
 
   for (const model of modelsToTry) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout per model
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
       console.log(`Attempting scripture lookup with model: ${model}`);
@@ -131,24 +132,29 @@ Devuelve ÚNICAMENTE un objeto JSON estructurado según el siguiente esquema (si
 }`;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: prompt
-                  }
-                ]
+            model: model,
+            input: prompt,
+            response_format: {
+              type: "text",
+              mime_type: "application/json",
+              schema: {
+                type: "object",
+                properties: {
+                  book: { type: "string" },
+                  chapter: { type: "integer" },
+                  verse: { type: "string" },
+                  text: { type: "string" },
+                  version: { type: "string" }
+                },
+                required: ["book", "chapter", "verse", "text", "version"]
               }
-            ],
-            generationConfig: {
-              responseMimeType: "application/json"
             }
           }),
           signal: controller.signal
@@ -173,19 +179,26 @@ Devuelve ÚNICAMENTE un objeto JSON estructurado según el siguiente esquema (si
           console.warn(`Model ${model} returned 404. Trying next model...`);
           continue;
         }
-        // For other API errors (e.g. 403, 429), break loop and throw
         throw lastError;
       }
 
-      const data = await response.json();
-      const textContent = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const interaction = await response.json();
+      
+      // The text is typically in interaction.steps[last].content[0].text
+      // Find the last step that is of type model_output
+      const steps = interaction.steps || [];
+      const modelOutputs = steps.filter((s: any) => s.type === "model_output");
+      if (modelOutputs.length === 0) throw new Error("Empty response from Gemini");
+      
+      const lastOutput = modelOutputs[modelOutputs.length - 1];
+      const textContent = lastOutput.content?.[0]?.text;
+
       if (!textContent) {
-        throw new Error("Empty response from Gemini");
+        throw new Error("Empty text in model output");
       }
 
       const parsedVerse = JSON.parse(textContent.trim());
       
-      // Save this model as the last working model so we try it first next time
       localStorage.setItem("sermonpro_last_working_gemini_model", model);
       console.log(`Successfully resolved scripture using model: ${model}`);
 
@@ -207,7 +220,7 @@ Devuelve ÚNICAMENTE un objeto JSON estructurado según el siguiente esquema (si
         lastError = err;
       }
 
-      // Stop looping if the key itself is unauthorized or over quota
+      // Stop looping if the key itself is unauthorized
       if (lastError.message && (lastError.message.includes("403") || lastError.message.includes("429"))) {
         break;
       }
@@ -245,7 +258,7 @@ export async function generateSermonContentAsync(
   }
 
   const cachedModel = localStorage.getItem("sermonpro_last_working_gemini_model");
-  const baseModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-1.5-flash"];
+  const baseModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
   const modelsToTry = cachedModel && baseModels.includes(cachedModel)
     ? [cachedModel, ...baseModels.filter((m) => m !== cachedModel)]
     : baseModels;
@@ -254,11 +267,11 @@ export async function generateSermonContentAsync(
 
   for (const model of modelsToTry) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout per model for longer gen
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
     try {
       console.log(`Attempting content generation with model: ${model}`);
-      const systemPrompt = `Eres un asistente de Inteligencia Artificial especializado en Homilética Cristiana.
+      const promptText = `Eres un asistente de Inteligencia Artificial especializado en Homilética Cristiana.
 Tu objetivo es ayudar a un pastor a desarrollar un bosquejo o sección específica de un sermón.
 Contexto del Sermón:
 - Título: ${context.title || "No definido"}
@@ -272,24 +285,17 @@ Responde directamente a la siguiente petición del pastor. No incluyas comentari
 Petición del Pastor: "${prompt}"`;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: systemPrompt,
-                  },
-                ],
-              },
-            ],
+            model: model,
+            input: promptText
           }),
-          signal: controller.signal,
+          signal: controller.signal
         }
       );
 
@@ -309,11 +315,17 @@ Petición del Pastor: "${prompt}"`;
         throw lastError;
       }
 
-      const data = await response.json();
-      const textContent = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const interaction = await response.json();
+      
+      const steps = interaction.steps || [];
+      const modelOutputs = steps.filter((s: any) => s.type === "model_output");
+      if (modelOutputs.length === 0) throw new Error("Empty response from Gemini");
+      
+      const lastOutput = modelOutputs[modelOutputs.length - 1];
+      const textContent = lastOutput.content?.[0]?.text;
       
       if (!textContent) {
-        throw new Error("Empty response from Gemini");
+        throw new Error("Empty text in model output");
       }
 
       localStorage.setItem("sermonpro_last_working_gemini_model", model);

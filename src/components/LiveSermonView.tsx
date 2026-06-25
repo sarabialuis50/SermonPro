@@ -257,6 +257,7 @@ export default function LiveSermonView({
     // 5. Build elements
     const partsArray: React.ReactNode[] = [];
     let lastIndex = 0;
+    let noteIndex = 1;
 
     filteredMatches.forEach((m, idx) => {
       if (m.index > lastIndex) {
@@ -276,6 +277,7 @@ export default function LiveSermonView({
           </button>
         );
       } else if (m.type === "note") {
+        const currentNoteIndex = noteIndex++;
         partsArray.push(
           <button
             key={`note-${m.index}-${idx}`}
@@ -284,7 +286,7 @@ export default function LiveSermonView({
             title="Ver Nota"
           >
             <StickyNote className="h-3.5 w-3.5 mr-1 text-sky-600 dark:text-sky-400 inline shrink-0" />
-            Nota
+            Nota {currentNoteIndex}
           </button>
         );
       }

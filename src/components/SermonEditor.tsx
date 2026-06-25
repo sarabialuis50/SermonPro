@@ -92,8 +92,10 @@ const textToHtml = (text: string): string => {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
+  let noteIndex = 1;
   html = html.replace(/\[Nota:\s*(.*?)\]/gi, (match, noteText) => {
-    return `<span class="editor-note-badge inline-flex items-center space-x-1 py-0.5 px-2 bg-sky-500/10 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-sans font-bold border border-sky-500/35 mx-1 align-baseline cursor-pointer rounded-sm text-xs md:text-sm hover:bg-sky-500/20 select-none" contenteditable="false" data-note="${noteText.replace(/"/g, '&quot;')}">${StickyNoteIconSvg}<span>Nota</span></span>`;
+    const currentIndex = noteIndex++;
+    return `<span class="editor-note-badge inline-flex items-center space-x-1 py-0.5 px-2 bg-sky-500/10 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-sans font-bold border border-sky-500/35 mx-1 align-baseline cursor-pointer rounded-sm text-xs md:text-sm hover:bg-sky-500/20 select-none" contenteditable="false" data-note="${noteText.replace(/"/g, '&quot;')}">${StickyNoteIconSvg}<span>Nota ${currentIndex}</span></span>`;
   });
 
   const bibleRegex = new RegExp(BIBLE_REGEX_STR, 'gi');
@@ -128,7 +130,22 @@ const htmlToText = (node: Node): string => {
   return text;
 };
 
-function RichTextEditor({ value, onChange, placeholder, className, onOpenNote }: any) {
+function getCaretCharacterOffsetWithin(element: HTMLElement) {
+  let caretOffset = 0;
+  const doc = element.ownerDocument || element.document;
+  const win = doc.defaultView || doc.parentWindow;
+  const sel = win.getSelection();
+  if (sel && sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0);
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+    caretOffset = preCaretRange.toString().length;
+  }
+  return caretOffset;
+}
+
+function RichTextEditor({ value, onChange, placeholder, className, onOpenNote, onCursorChange }: any) {
   const editorRef = React.useRef<HTMLDivElement>(null);
   
   React.useEffect(() => {
@@ -147,6 +164,13 @@ function RichTextEditor({ value, onChange, placeholder, className, onOpenNote }:
     if (newText !== value) {
       onChange(newText);
     }
+    updateCursor();
+  };
+
+  const updateCursor = () => {
+    if (!editorRef.current || !onCursorChange) return;
+    const offset = getCaretCharacterOffsetWithin(editorRef.current);
+    onCursorChange(offset);
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -159,6 +183,7 @@ function RichTextEditor({ value, onChange, placeholder, className, onOpenNote }:
         onOpenNote(note);
       }
     }
+    updateCursor();
   };
 
   const handleFocus = () => {
@@ -183,6 +208,7 @@ function RichTextEditor({ value, onChange, placeholder, className, onOpenNote }:
       suppressContentEditableWarning
       onInput={handleInput}
       onClick={handleClick}
+      onKeyUp={updateCursor}
       onFocus={handleFocus}
       onBlur={handleBlur}
       className={className}
@@ -202,6 +228,7 @@ export default function SermonEditor({ sermon, onChange, onStartPreaching, isPro
   const [newSectionTitle, setNewSectionTitle] = useState("");
   const [expandedSectionIds, setExpandedSectionIds] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
+  const [activeCursorOffsets, setActiveCursorOffsets] = useState<Record<string, number>>({});
 
   // Bible Builder state
   const [activeBibleBuilderSectionId, setActiveBibleBuilderSectionId] = useState<string | null>(null);
@@ -239,10 +266,23 @@ export default function SermonEditor({ sermon, onChange, onStartPreaching, isPro
 
     const updatedSections = sermon.sections.map(sec => {
       if (sec.id === activeNoteBuilderSectionId) {
-        const spacer = sec.content ? (sec.content.endsWith(" ") ? "" : " ") : "";
+        let newContent = sec.content || "";
+        const cursorOffset = activeCursorOffsets[sec.id];
+        
+        if (cursorOffset !== undefined && cursorOffset >= 0 && cursorOffset <= newContent.length) {
+          const before = newContent.substring(0, cursorOffset);
+          const after = newContent.substring(cursorOffset);
+          const prefixSpacer = before.length > 0 && !before.endsWith(" ") ? " " : "";
+          const suffixSpacer = after.length > 0 && !after.startsWith(" ") ? " " : "";
+          newContent = before + prefixSpacer + formattedNote + suffixSpacer + after;
+        } else {
+          const spacer = newContent ? (newContent.endsWith(" ") ? "" : " ") : "";
+          newContent = newContent + spacer + formattedNote;
+        }
+
         return {
           ...sec,
-          content: sec.content + spacer + formattedNote
+          content: newContent
         };
       }
       return sec;
@@ -306,10 +346,22 @@ export default function SermonEditor({ sermon, onChange, onStartPreaching, isPro
 
     const updatedSections = sermon.sections.map(sec => {
       if (sec.id === activeBibleBuilderSectionId) {
-        const spacer = sec.content ? (sec.content.endsWith(" ") ? "" : " ") : "";
+        let newContent = sec.content || "";
+        const cursorOffset = activeCursorOffsets[sec.id];
+        
+        if (cursorOffset !== undefined && cursorOffset >= 0 && cursorOffset <= newContent.length) {
+          const before = newContent.substring(0, cursorOffset);
+          const after = newContent.substring(cursorOffset);
+          const prefixSpacer = before.length > 0 && !before.endsWith(" ") ? " " : "";
+          const suffixSpacer = after.length > 0 && !after.startsWith(" ") ? " " : "";
+          newContent = before + prefixSpacer + citation + suffixSpacer + after;
+        } else {
+          const spacer = newContent ? (newContent.endsWith(" ") ? "" : " ") : "";
+          newContent = newContent + spacer + citation;
+        }
         return {
           ...sec,
-          content: sec.content + spacer + citation
+          content: newContent
         };
       }
       return sec;
@@ -944,6 +996,7 @@ ${sermon.notes || "No hay notas adicionales."}`;
                         <RichTextEditor
                           value={section.content}
                           onChange={(newContent: string) => handleSectionChange(section.id, { content: newContent })}
+                          onCursorChange={(offset: number) => setActiveCursorOffsets(prev => ({...prev, [section.id]: offset}))}
                           onOpenNote={(noteText: string) => handleOpenNoteViewer(noteText)}
                           placeholder="Escribe el borrador, ideas primarias o citas de apoyo. Citas directas de la Biblia (e.g. Mateo 7:24) se colorearán automáticamente."
                           className="w-full min-h-[160px] rounded-none border-2 border-slate-900 p-3.5 text-sm md:text-base font-serif leading-relaxed tracking-wide outline-hidden focus:bg-white dark:border-zinc-850 dark:bg-zinc-950 dark:text-neutral-150 scrollbar-thin resize-y overflow-y-auto cursor-text bg-white"
